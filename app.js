@@ -1,3 +1,4 @@
+// SIMPLE DUMMY DATA
 const GAME_DUMMY_DATA = {
   UNASSIGNED: 0,
   TABLE_SIZE: 9,
@@ -7,11 +8,14 @@ const GAME_DUMMY_DATA = {
   LEVEL_POINTS: [29, 38, 47],
 };
 
+// GAME SCREENS
 const startGame = document.querySelector("#screen-start_game");
 
+// GAME VALUES
 let levels = 0;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levels];
 
+// CHANGING GAME DIFFICULTIES BY PRESSING A BUTTON
 document
   .querySelector("#btn-difficulties")
   .addEventListener("click", (event) => {
@@ -22,7 +26,7 @@ document
   });
 
 document.querySelector("#btn-new").addEventListener("click", () => {
-  alert("startgame");
+  alert(`${level}`);
 });
 
 const gameInfo = () => JSON.parse(localStorage.getItem("game"));
