@@ -144,6 +144,7 @@ nav {
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 1rem;
+    gap: 1rem;
 }
 
 /* BUTTONS */
@@ -164,4 +165,34 @@ nav {
 .btn:hover {
   background-color: rgb(214, 104, 64);
   transition: 0.3s;
+}
+
+.btn-delete {
+    background-color: rgb(209, 37, 37);
+    color: #fff;
+    border: none;
+    border-radius: 0.4rem;
+    height: 1.6rem;
+    font-family: "Passion One", cursive;
+    font-size: 1.6rem;
+}
+
+.btn-number {
+    height: 1.6rem;
+    font-family: "Passion One", cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.btn-number:hover {
+    background-color: coral;
+    border: none;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: rgb(153, 40, 40);
+    transition: 0.3s;
+    cursor: pointer;
 }

@@ -9,12 +9,40 @@ const GAME_DUMMY_DATA = {
 };
 
 // GAME SCREENS
-const startGame = document.querySelector("#screen-start_game");
+const startGame = document.querySelector("#start-screen");
+const sudokuScreen = document.querySelector("#sudoku-screen");
 
 // GAME VALUES
 let levels = 0;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levels];
 const cells = document.querySelectorAll(".sudoku-screen_cell");
+
+const gameInfo = () => JSON.parse(localStorage.getItem("game"));
+
+// CELLS FUNCTION FORMATION BUILDING SUDOKU BOARD
+const sudokuBoard = () => {
+  let cellIndex = 0;
+
+  for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
+    let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
+    let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
+
+    if (row === 2 || row === 5) {
+      cells[cellIndex].style.marginBottom = "1rem";
+    }
+
+    if (col === 2 || col === 5) {
+      cells[cellIndex].style.marginRight = "1rem";
+    }
+
+    cellIndex++;
+  }
+};
+
+const gameStarted = () => {
+    startGame.classList.remove("active");
+    sudokuScreen.classList.add("active");
+};
 
 // CHANGING GAME DIFFICULTIES BY PRESSING A BUTTON
 document
@@ -27,30 +55,8 @@ document
   });
 
 document.querySelector("#btn-new").addEventListener("click", () => {
-  alert(`${level}`);
+  gameStarted();
 });
-
-const gameInfo = () => JSON.parse(localStorage.getItem("game"));
-
-// CELLS FUNCTION FORMATION BUILDING SUDOKU BOARD
-const sudokuBoard = () => {
-    let cellIndex = 0;
-
-    for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
-        let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
-        let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
-
-        if (row === 2 || row === 5)  {
-            cells[cellIndex].style.marginBottom = "1rem";
-        }
-
-        if (col === 2 || col === 5) {
-            cells[cellIndex].style.marginRight = "1rem";
-        }
-
-        cellIndex++;
-    }
-};
 
 const init = () => {
   const game = gameInfo();
@@ -58,7 +64,7 @@ const init = () => {
     ? "grid"
     : "none";
 
-    sudokuBoard();
+  sudokuBoard();
 };
 
 init();
