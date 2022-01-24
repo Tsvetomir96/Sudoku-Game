@@ -66,8 +66,31 @@ nav {
 }
 
 .screen {
-    padding-top: 15rem;
+    padding-top: 6rem;
 }
+
+.screen-start_game {
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.menu-body {
+    min-height: 15rem;
+}
+
+.menu-body_image {
+    margin-bottom: 2rem;
+}
+
+.menu-body_actions {
+    display: grid;
+}
+
+.menu-body_actions label {
+    letter-spacing: 0.1rem;
+    font-size: 1.2rem;
+}
+
 
 /* BUTTONS */
 
@@ -77,6 +100,8 @@ nav {
     background-color: coral;
     border-radius: 0.5rem;
     padding: 0.5rem;
+    margin-bottom: 0.2rem;
+    cursor: pointer;
 }
 
 .btn:hover {
