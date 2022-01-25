@@ -39,6 +39,8 @@ const sudokuBoard = () => {
   }
 };
 
+const initSudoku = () => {};
+
 const gameStarted = () => {
     startGame.classList.remove("active");
     sudokuScreen.classList.add("active");
