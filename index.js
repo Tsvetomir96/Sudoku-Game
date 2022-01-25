@@ -1,4 +1,4 @@
-const sudokuTable = (size) => {
+const newSudokuBoard = (size) => {
   let sizeArr = new Array(size);
 
   for (let i = 0; i < size; i++) {
@@ -12,57 +12,56 @@ const sudokuTable = (size) => {
   return sizeArr;
 };
 
-const sudokuCol = (grid, col, value) => {
+
+const sudokuCol = (table, col, value) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_SIZE; row++) {
-    if (grid[row][col] === value) {
-      return false;
-    }
+    if (table[row][col] === value) return false;
   }
   return true;
 };
 
-const sudokuRow = (grid, row, value) => {
+
+const sudokuRow = (table, row, value) => {
   for (let col = 0; col < GAME_DUMMY_DATA.TABLE_SIZE; col++) {
-    if (grid[row[col] === value]) {
-      return false;
-    }
+    if (table[row][col] === value) return false;
   }
   return true;
 };
 
-const sudokuBox = (grid, boxRow, boxCol, value) => {
+
+const sudokuBox = (table, boxRow, boxCol, value) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_BOX; row++) {
     for (let col = 0; col < GAME_DUMMY_DATA.TABLE_BOX; col++) {
-      if (grid[row + boxRow][col + boxCol] === value) {
-        return false;
-      }
+      if (table[row + boxRow][col + boxCol] === value) return false;
     }
   }
   return true;
 };
 
-const boardCheck = (grid, row, col, value) => {
+
+const sudokuRowColBox = (table, row, col, value) => {
   return (
-    sudokuCol(grid, col, value) &&
-    sudokuRow(grid, row, value) &&
-    sudokuBox(grid, row - (row % 3), col - (col % 3), value) &&
+    sudokuCol(table, col, value) &&
+    sudokuRow(table, row, value) &&
+    sudokuBox(table, row - (row % 3), col - (col % 3), value) &&
     value !== GAME_DUMMY_DATA.UNASSIGNED
   );
 };
 
-const emptyCell = (grid, position) => {
+
+const unassignedCell = (table, position) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_SIZE; row++) {
     for (let col = 0; col < GAME_DUMMY_DATA.TABLE_SIZE; col++) {
-      if (grid[row][col] === GAME_DUMMY_DATA.UNASSIGNED) {
+      if (table[row][col] === GAME_DUMMY_DATA.UNASSIGNED) {
         position.row = row;
         position.col = col;
-
         return true;
       }
     }
   }
   return false;
 };
+
 
 const shuffleArray = (arr) => {
   let currentIndex = arr.length;
@@ -75,88 +74,84 @@ const shuffleArray = (arr) => {
     arr[currentIndex] = arr[randomIndex];
     arr[randomIndex] = temp;
   }
+
   return arr;
 };
 
-const sudokuGameCompleted = (grid) => {
-  return grid.every((row, i) => {
-    return row.every((value, y) => {
+
+const sudokuBoardCompleted = (table) => {
+  return table.every((row, i) => {
+    return row.every((value, j) => {
       return value !== GAME_DUMMY_DATA.UNASSIGNED;
     });
   });
 };
 
-const sudokuCreate = (grid) => {
-  let unassignedPossition = {
-    row: -1,
-    col: -1,
-  };
-
-  if (!emptyCell(grid, unassignedPossition)) {
-    return true;
-  }
-
-  let numberList = shuffleArray([...GAME_DUMMY_DATA.SUDOKU_NUMBERS]);
-
-  let row = unassignedPossition.row;
-  let col = unassignedPossition.col;
-
-  numberList.forEach((number, i) => {
-    if (boardCheck(grid, row, col, number)) {
-      grid[row][col] = number;
-
-      if (sudokuGameCompleted(grid)) {
-        return true;
-      } else {
-        if (sudokuCreate(grid)) {
-          return true;
-        }
-      }
-
-      grid[row][col] = GAME_DUMMY_DATA.UNASSIGNED;
-    }
-  });
-
-  return sudokuGameCompleted(grid);
-};
-
-const sudokuCheck = (grid) => {
+const sudokuCreate = (table) => {
   let unassignedPosition = {
     row: -1,
     col: -1,
   };
 
-  if (!emptyCell(grid, unassignedPosition)) {
-    return true;
-  }
-  grid.forEach((row, i) => {
-    row.forEach((number, y) => {
-      if (boardCheck(grid, i, y, number)) {
-        if (sudokuGameCompleted(grid)) {
+  if (!unassignedCell(table, unassignedPosition)) return true;
+
+  let numberList = shuffleArray([...GAME_DUMMY_DATA.SUDOKU_NUMBERS]);
+
+  let row = unassignedPosition.row;
+  let col = unassignedPosition.col;
+
+  numberList.forEach((number, i) => {
+    if (sudokuRowColBox(table, row, col, number)) {
+      table[row][col] = number;
+
+      if (sudokuBoardCompleted(table)) {
+        return true;
+      } else {
+        if (sudokuCreate(table)) {
+          return true;
+        }
+      }
+
+      table[row][col] = GAME_DUMMY_DATA.UNASSIGNED;
+    }
+  });
+
+  return sudokuBoardCompleted(table);
+};
+
+const sudokuCheck = (table) => {
+  let unassignedPosition = {
+    row: -1,
+    col: -1,
+  };
+
+  if (!unassignedCell(table, unassignedPosition)) return true;
+
+  table.forEach((row, i) => {
+    row.forEach((number, j) => {
+      if (sudokuRowColBox(table, i, j, number)) {
+        if (sudokuBoardCompleted(table)) {
           return true;
         } else {
-          if (sudokuCreate(grid)) {
+          if (sudokuCreate(table)) {
             return true;
           }
         }
       }
     });
   });
-  return sudokuGameCompleted(grid);
+
+  return sudokuBoardCompleted(table);
 };
 
-const random = () => {
-  Math.floor(Math.random() * GAME_DUMMY_DATA.TABLE_SIZE);
-};
+const random = () => Math.floor(Math.random() * GAME_DUMMY_DATA.TABLE_SIZE);
 
-const removeCells = (grid, level) => {
-  let reset = [...grid];
+const removeCells = (table, level) => {
+  let reset = [...table];
   let attemps = level;
-
   while (attemps > 0) {
     let row = random();
     let col = random();
-
     while (reset[row][col] === 0) {
       row = random();
       col = random();
@@ -167,17 +162,16 @@ const removeCells = (grid, level) => {
   return reset;
 };
 
-const sudokuLevelGenerator = (level) => {
-  let game = sudokuTable(GAME_DUMMY_DATA.TABLE_SIZE);
-  let gameCheck = sudokuCreate(game);
 
-  if (gameCheck) {
-    let question = removeCells(game, level);
-
+const sudokuNumGenerator = (level) => {
+  let sudoku = newSudokuBoard(GAME_DUMMY_DATA.TABLE_SIZE);
+  let check = sudokuCreate(sudoku);
+  if (check) {
+    let question = removeCells(sudoku, level);
     return {
-      original: game,
+      original: sudoku,
       question: question,
     };
   }
-  return;
+  return undefined;
 };

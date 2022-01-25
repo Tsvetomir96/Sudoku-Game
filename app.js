@@ -32,20 +32,18 @@ const sudokuBoard = () => {
 };
 
 const initSudoku = () => {
-  gameSudoku = sudokuLevelGenerator(level);
+  gameSudoku = sudokuNumGenerator(level);
   sudokuAnswer = [...gameSudoku.question];
-
-  console.table(sudokuAnswer);
 
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
     let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
 
-    cells[i].setAttribute("data-value", sudokuAnswer.question[row][col]);
+    cells[i].setAttribute('data-value', gameSudoku.question[row][col]);
 
-    if (sudokuAnswer.question[row][col] !== 0) {
+    if (gameSudoku.question[row][col] !== 0) {
       cells[i].classList.add("fill");
-      cells[i].innerHTML = sudokuAnswer.question[row][col];
+      cells[i].innerHTML = gameSudoku.question[row][col];
     }
   }
 };
@@ -68,8 +66,8 @@ document
   });
 
 document.querySelector("#btn-new").addEventListener("click", () => {
-    gameStarted();
-    initSudoku();
+  gameStarted();
+  initSudoku();
 });
 
 const init = () => {

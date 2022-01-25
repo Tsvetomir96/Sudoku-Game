@@ -33,13 +33,13 @@ a {
 .header {
   width: 100%;
   background-color: coral;
-  min-height: 3rem;
+  min-height: 2.3rem;
 }
 
 /* NAVIGATION BAR */
 
 nav {
-  padding: 1.5rem 0;
+  padding: 0.9rem 0;
   z-index: 99;
 }
 
@@ -120,8 +120,8 @@ nav {
 }
 
 .sudoku-screen_cell.fill {
-    color: red;
-    background-color: rgb(214, 104, 64);
+  background-color: #eee;
+  color: rgb(65, 65, 65);
 }
 
 .sudoku-screen_cell.select {
