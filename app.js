@@ -1,3 +1,13 @@
+// SIMPLE DUMMY DATA
+const GAME_DUMMY_DATA = {
+  UNASSIGNED: 0,
+  TABLE_SIZE: 9,
+  TABLE_BOX: 3,
+  SUDOKU_NUMBERS: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  LEVELS: ["Easy", "Medium", "Hard"],
+  LEVEL_POINTS: [29, 38, 47],
+};
+
 // GAME SCREENS
 const startGame = document.querySelector("#start-screen");
 const sudokuScreen = document.querySelector("#sudoku-screen");
@@ -31,7 +41,17 @@ const sudokuBoard = () => {
   }
 };
 
+const newSudokuGame = () => {
+  for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
+    cells[i].innerHTML = "";
+    cells[i].classList.remove("fill");
+    cells[i].classList.remove("select");
+  }
+};
+
 const initSudoku = () => {
+  newSudokuGame();
+
   gameSudoku = sudokuNumGenerator(level);
   sudokuAnswer = [...gameSudoku.question];
 
@@ -39,7 +59,7 @@ const initSudoku = () => {
     let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
     let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
 
-    cells[i].setAttribute('data-value', gameSudoku.question[row][col]);
+    cells[i].setAttribute("data-value", gameSudoku.question[row][col]);
 
     if (gameSudoku.question[row][col] !== 0) {
       cells[i].classList.add("fill");
