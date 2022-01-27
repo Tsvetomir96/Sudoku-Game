@@ -12,9 +12,11 @@ const GAME_DUMMY_DATA = {
 const startGame = document.querySelector("#start-screen");
 const sudokuScreen = document.querySelector("#sudoku-screen");
 const cells = document.querySelectorAll(".sudoku-screen_cell");
+const gameControllers = document.querySelectorAll(".btn-number");
 
 // GAME VALUES
 let levelIndex = 0;
+let selectedCell = -1;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
 let gameSudoku;
 let sudokuAnswer;
@@ -49,7 +51,16 @@ const newSudokuGame = () => {
   }
 };
 
+const sudokuBoardClear = () => {
+  for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
+    cells[i].innerHTML = "";
+    cells[i].classList.remove("fill");
+    cells[i].classList.remove("select");
+  }
+};
+
 const initSudoku = () => {
+  sudokuBoardClear();
   newSudokuGame();
 
   gameSudoku = sudokuNumGenerator(level);
@@ -66,6 +77,80 @@ const initSudoku = () => {
       cells[i].innerHTML = gameSudoku.question[row][col];
     }
   }
+};
+
+const clickedCell = (index) => {
+  let row = Math.floor(index / GAME_DUMMY_DATA.TABLE_SIZE);
+  let col = index % GAME_DUMMY_DATA.TABLE_SIZE;
+
+  let box_start_row = row - (row % 3);
+  let box_start_col = col - (col % 3);
+
+  for (let i = 0; i < GAME_DUMMY_DATA.TABLE_BOX; i++) {
+    for (let j = 0; j < GAME_DUMMY_DATA.TABLE_BOX; j++) {
+      let cell = cells[9 * (box_start_row + i) + (box_start_col + j)];
+      cell.classList.add("hover");
+    }
+  }
+
+  let step = 9;
+  while (index - step >= 0) {
+    cells[index - step].classList.add("hover");
+    step += 9;
+  }
+
+  step = 9;
+  while (index + step < 81) {
+    cells[index + step].classList.add("hover");
+    step += 9;
+  }
+
+  step = 1;
+  while (index - step >= 9 * row) {
+    cells[index - step].classList.add("hover");
+    step += 1;
+  }
+
+  step = 1;
+  while (index + step < 9 * row + 9) {
+    cells[index + step].classList.add("hover");
+    step += 1;
+  }
+};
+
+const resetCell = () => {
+  cells.forEach((event) => event.classList.remove("hover"));
+};
+
+const addNumberToBoard = () => {
+  gameControllers.forEach((event, index) => {
+    event.addEventListener("click", () => {
+      if (!cells[selectedCell].classList.contains("fill")) {
+        cells[selectedCell].innerHTML = index + 1;
+        cells[selectedCell].setAttribute("data-value", index + 1);
+
+        let row = Math.floor(selectedCell / GAME_DUMMY_DATA.TABLE_SIZE);
+        let col = selectedCell % GAME_DUMMY_DATA.TABLE_SIZE;
+        sudokuAnswer[row][col] = index + 1;
+      }
+    });
+  });
+};
+
+const cellEvent = () => {
+  cells.forEach((event, index) => {
+    event.addEventListener("click", () => {
+      if (!event.classList.contains("fill")) {
+        cells.forEach((event) => event.classList.remove("select"));
+
+        selectedCell = index;
+        event.classList.add("select");
+
+        resetCell();
+        clickedCell(index);
+      }
+    });
+  });
 };
 
 const gameStarted = () => {
@@ -97,6 +182,8 @@ const init = () => {
     : "none";
 
   sudokuBoard();
+  cellEvent();
+  addNumberToBoard();
 };
 
 init();
