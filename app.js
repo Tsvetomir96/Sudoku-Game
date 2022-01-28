@@ -92,30 +92,6 @@ const clickedCell = (index) => {
       cell.classList.add("hover");
     }
   }
-
-  let step = 9;
-  while (index - step >= 0) {
-    cells[index - step].classList.add("hover");
-    step += 9;
-  }
-
-  step = 9;
-  while (index + step < 81) {
-    cells[index + step].classList.add("hover");
-    step += 9;
-  }
-
-  step = 1;
-  while (index - step >= 9 * row) {
-    cells[index - step].classList.add("hover");
-    step += 1;
-  }
-
-  step = 1;
-  while (index + step < 9 * row + 9) {
-    cells[index + step].classList.add("hover");
-    step += 1;
-  }
 };
 
 const resetCell = () => {
