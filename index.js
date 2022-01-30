@@ -1,3 +1,4 @@
+// Looping an array for generating numbers, for creating the board grid.
 const newSudokuBoard = (size) => {
   let sizeArr = new Array(size);
 
@@ -12,7 +13,7 @@ const newSudokuBoard = (size) => {
   return sizeArr;
 };
 
-
+// Checks the numbers in the table columns.
 const sudokuCol = (table, col, value) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_SIZE; row++) {
     if (table[row][col] === value) return false;
@@ -20,7 +21,7 @@ const sudokuCol = (table, col, value) => {
   return true;
 };
 
-
+// Checks the numbers in the table rows.
 const sudokuRow = (table, row, value) => {
   for (let col = 0; col < GAME_DUMMY_DATA.TABLE_SIZE; col++) {
     if (table[row][col] === value) return false;
@@ -28,7 +29,7 @@ const sudokuRow = (table, row, value) => {
   return true;
 };
 
-
+// Checks the numbers in the 3x3 table.
 const sudokuBox = (table, boxRow, boxCol, value) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_BOX; row++) {
     for (let col = 0; col < GAME_DUMMY_DATA.TABLE_BOX; col++) {
@@ -38,7 +39,7 @@ const sudokuBox = (table, boxRow, boxCol, value) => {
   return true;
 };
 
-
+// Checks the numbers in the whole sudoku board.
 const sudokuRowColBox = (table, row, col, value) => {
   return (
     sudokuCol(table, col, value) &&
@@ -48,7 +49,7 @@ const sudokuRowColBox = (table, row, col, value) => {
   );
 };
 
-
+// Checks for unassigned sudoku cell.
 const unassignedCell = (table, position) => {
   for (let row = 0; row < GAME_DUMMY_DATA.TABLE_SIZE; row++) {
     for (let col = 0; col < GAME_DUMMY_DATA.TABLE_SIZE; col++) {
@@ -62,7 +63,7 @@ const unassignedCell = (table, position) => {
   return false;
 };
 
-
+// Checks from the array of numbers, except the zero element, which will be empty cell.
 const shuffleArray = (arr) => {
   let currentIndex = arr.length;
 
@@ -78,7 +79,7 @@ const shuffleArray = (arr) => {
   return arr;
 };
 
-
+// Check for completed sudoku table. 
 const sudokuBoardCompleted = (table) => {
   return table.every((row, i) => {
     return row.every((value, j) => {
@@ -87,6 +88,7 @@ const sudokuBoardCompleted = (table) => {
   });
 };
 
+// Generating the numbers for the game.
 const sudokuCreate = (table) => {
   let unassignedPosition = {
     row: -1,
@@ -119,6 +121,7 @@ const sudokuCreate = (table) => {
   return sudokuBoardCompleted(table);
 };
 
+// Check the generated numbers for the game.
 const sudokuCheck = (table) => {
   let unassignedPosition = {
     row: -1,
@@ -144,8 +147,10 @@ const sudokuCheck = (table) => {
   return sudokuBoardCompleted(table);
 };
 
+// Gives a random numbers for the table.
 const random = () => Math.floor(Math.random() * GAME_DUMMY_DATA.TABLE_SIZE);
 
+// Removes cells by the given level.
 const removeCells = (table, level) => {
   let reset = [...table];
   let attemps = level;
@@ -162,10 +167,11 @@ const removeCells = (table, level) => {
   return reset;
 };
 
-
+// Generating sudoku player board based on the level.
 const sudokuNumGenerator = (level) => {
   let sudoku = newSudokuBoard(GAME_DUMMY_DATA.TABLE_SIZE);
   let check = sudokuCreate(sudoku);
+  // Check for true, when we create game.
   if (check) {
     let question = removeCells(sudoku, level);
     return {
@@ -173,5 +179,5 @@ const sudokuNumGenerator = (level) => {
       question: question,
     };
   }
-  return undefined;
+  return;
 };

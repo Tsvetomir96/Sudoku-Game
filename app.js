@@ -19,8 +19,8 @@ const resultScreen = document.querySelector("#result-screen");
 let levelIndex = 0;
 let selectedCell = -1;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
-let gameSudoku = undefined;
-let sudokuAnswer = undefined;
+let gameSudoku;
+let sudokuAnswer;
 
 const gameInfo = () => JSON.parse(localStorage.getItem("game"));
 
