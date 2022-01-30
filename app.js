@@ -5,7 +5,7 @@ const GAME_DUMMY_DATA = {
   TABLE_BOX: 3,
   SUDOKU_NUMBERS: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   LEVELS: ["Easy", "Medium", "Hard"],
-  LEVEL_POINTS: [29, 38, 47],
+  LEVEL_POINTS: [1, 38, 47],
 };
 
 // GAME SCREENS
@@ -13,13 +13,14 @@ const startGame = document.querySelector("#start-screen");
 const sudokuScreen = document.querySelector("#sudoku-screen");
 const cells = document.querySelectorAll(".sudoku-screen_cell");
 const gameControllers = document.querySelectorAll(".btn-number");
+const resultScreen = document.querySelector("#result-screen");
 
 // GAME VALUES
 let levelIndex = 0;
 let selectedCell = -1;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
-let gameSudoku;
-let sudokuAnswer;
+let gameSudoku = undefined;
+let sudokuAnswer = undefined;
 
 const gameInfo = () => JSON.parse(localStorage.getItem("game"));
 
@@ -43,14 +44,6 @@ const sudokuBoard = () => {
   }
 };
 
-const newSudokuGame = () => {
-  for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
-    cells[i].innerHTML = "";
-    cells[i].classList.remove("fill");
-    cells[i].classList.remove("select");
-  }
-};
-
 const sudokuBoardClear = () => {
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     cells[i].innerHTML = "";
@@ -61,10 +54,12 @@ const sudokuBoardClear = () => {
 
 const initSudoku = () => {
   sudokuBoardClear();
-  newSudokuGame();
+  resetCell();
 
   gameSudoku = sudokuNumGenerator(level);
   sudokuAnswer = [...gameSudoku.question];
+
+  saveGameData();
 
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
@@ -98,6 +93,31 @@ const resetCell = () => {
   cells.forEach((event) => event.classList.remove("hover"));
 };
 
+const saveGameData = () => {
+  let game = {
+    level: levelIndex,
+    gameSudoku: {
+      original: gameSudoku.original,
+      question: gameSudoku.question,
+      answer: sudokuAnswer,
+    },
+  };
+  localStorage.setItem("game", JSON.stringify(game));
+};
+
+const removeGame = () => {
+  localStorage.removeItem("game");
+};
+
+const gameWin = () => {
+  sudokuCheck(sudokuAnswer);
+};
+
+const result = () => {
+  // resultScreen.classList.add("active");
+  alert("ahahhaha");
+};
+
 const addNumberToBoard = () => {
   gameControllers.forEach((event, index) => {
     event.addEventListener("click", () => {
@@ -108,6 +128,13 @@ const addNumberToBoard = () => {
         let row = Math.floor(selectedCell / GAME_DUMMY_DATA.TABLE_SIZE);
         let col = selectedCell % GAME_DUMMY_DATA.TABLE_SIZE;
         sudokuAnswer[row][col] = index + 1;
+
+        saveGameData();
+
+        if (gameWin()) {
+          removeGame();
+          result();
+        }
       }
     });
   });
@@ -147,15 +174,24 @@ document
   });
 
 document.querySelector("#btn-new").addEventListener("click", () => {
-  gameStarted();
   initSudoku();
+  gameStarted();
+});
+
+document.querySelector("#btn-delete").addEventListener("click", () => {
+  cells[selectedCell].innerHTML = "";
+  cells[selectedCell].setAttribute("data-value", 0);
+
+  let row = Math.floor(selectedCell / GAME_DUMMY_DATA.TABLE_SIZE);
+  let col = selectedCell % GAME_DUMMY_DATA.TABLE_SIZE;
+  sudokuAnswer[row][col] = 0;
 });
 
 const init = () => {
   const game = gameInfo();
-  document.querySelector("#btn-continue").style.display = game
-    ? "grid"
-    : "none";
+  // document.querySelector("#btn-continue").style.display = game
+  //   ? "grid"
+  //   : "none";
 
   sudokuBoard();
   cellEvent();

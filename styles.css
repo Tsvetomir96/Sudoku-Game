@@ -112,7 +112,7 @@ nav {
   width: 2.5rem;
   border-radius: 1rem;
   background-color: coral;
-  color: red;
+  color: rgb(65, 65, 65);
   display: grid;
   place-items: center;
   font-size: 1.4rem;
@@ -149,6 +149,34 @@ nav {
     margin-top: 1rem;
     border-radius: 1rem;
     gap: 1rem;
+}
+
+/* RESULT SCREEN */
+
+.result-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: none;
+}
+
+.result-screen.active {
+  display: flex;
+}
+
+.result-screen > * + * {
+  margin-top: 2rem;
+}
+
+.result-screen .win {
+  font-size: 4rem;
+  color: coral;
 }
 
 /* BUTTONS */
