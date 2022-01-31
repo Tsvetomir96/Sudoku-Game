@@ -5,7 +5,7 @@ const GAME_DUMMY_DATA = {
   TABLE_BOX: 3,
   SUDOKU_NUMBERS: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   LEVELS: ["Easy", "Medium", "Hard"],
-  LEVEL_POINTS: [2, 38, 47],
+  LEVEL_POINTS: [1, 38, 47],
 };
 
 // GAME SCREENS & CONTROLLERS
@@ -31,14 +31,8 @@ const sudokuBoard = () => {
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
     let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
-
-    if (row === 2 || row === 5) {
-      cells[cellIndex].style.marginBottom = "1rem";
-    }
-
-    if (col === 2 || col === 5) {
-      cells[cellIndex].style.marginRight = "1rem";
-    }
+    if (row === 2 || row === 5) cells[cellIndex].style.marginBottom = "1rem";
+    if (col === 2 || col === 5) cells[cellIndex].style.marginRight = "1rem";
 
     cellIndex++;
   }
@@ -61,7 +55,7 @@ const initSudoku = () => {
   gameSudoku = sudokuNumGenerator(level);
   sudokuAnswer = [...gameSudoku.question];
 
-  saveGameData();
+  saveGameInfo();
 
   // Show the sudoku to the SPAN elements.
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
@@ -93,10 +87,10 @@ const clickedCell = (index) => {
 };
 
 const resetCell = () => {
-  cells.forEach((event) => event.classList.remove("hover"));
+  cells.forEach((e) => e.classList.remove("hover"));
 };
 
-const saveGameData = () => {
+const saveGameInfo = () => {
   let game = {
     level: levelIndex,
     gameSudoku: {
@@ -108,34 +102,33 @@ const saveGameData = () => {
   localStorage.setItem("game", JSON.stringify(game));
 };
 
-const removeGame = () => {
+const removeGameInfo = () => {
   localStorage.removeItem("game");
 };
 
-const gameWin = () => {
-  sudokuCheck(sudokuAnswer);
-};
+const gameWin = () => sudokuCheck(sudokuAnswer);
 
-const result = () => {
+const sudokuResult = () => {
   resultScreen.classList.add("active");
 };
 
 const addNumberToBoard = () => {
-  gameControllers.forEach((event, index) => {
-    event.addEventListener("click", () => {
-      if (!cells[selectedCell].classList.contains("fill")) {
+  gameControllers.forEach((e, index) => {
+    e.addEventListener("click", () => {
+      if (!cells[selectedCell].classList.contains("filled")) {
         cells[selectedCell].innerHTML = index + 1;
         cells[selectedCell].setAttribute("data-value", index + 1);
-
+        // Add to answer
         let row = Math.floor(selectedCell / GAME_DUMMY_DATA.TABLE_SIZE);
         let col = selectedCell % GAME_DUMMY_DATA.TABLE_SIZE;
         sudokuAnswer[row][col] = index + 1;
+        // Save game
+        saveGameInfo();
 
-        saveGameData();
-
+        // Check game win
         if (gameWin()) {
-          removeGame();
-          result();
+          removeGameInfo();
+          sudokuResult();
         }
       }
     });
@@ -143,14 +136,13 @@ const addNumberToBoard = () => {
 };
 
 const cellEvent = () => {
-  cells.forEach((event, index) => {
-    event.addEventListener("click", () => {
-      if (!event.classList.contains("fill")) {
-        cells.forEach((event) => event.classList.remove("select"));
+  cells.forEach((e, index) => {
+    e.addEventListener("click", () => {
+      if (!e.classList.contains("fill")) {
+        cells.forEach((e) => e.classList.remove("select"));
 
         selectedCell = index;
-        event.classList.add("select");
-
+        e.classList.add("select");
         resetCell();
         clickedCell(index);
       }
@@ -164,16 +156,14 @@ const gameStarted = () => {
 };
 
 // CHANGING GAME DIFFICULTIES BY PRESSING A BUTTON
-document
-  .querySelector("#btn-difficulties")
-  .addEventListener("click", (event) => {
-    levelIndex =
-      levelIndex + 1 > GAME_DUMMY_DATA.LEVEL_POINTS.length - 1
-        ? 0
-        : levelIndex + 1;
-    level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
-    event.target.innerHTML = GAME_DUMMY_DATA.LEVELS[levelIndex];
-  });
+document.querySelector("#btn-difficulties").addEventListener("click", (e) => {
+  levelIndex =
+    levelIndex + 1 > GAME_DUMMY_DATA.LEVEL_POINTS.length - 1
+      ? 0
+      : levelIndex + 1;
+  level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
+  e.target.innerHTML = GAME_DUMMY_DATA.LEVELS[levelIndex];
+});
 
 document.querySelector("#btn-new").addEventListener("click", () => {
   initSudoku();
@@ -181,7 +171,8 @@ document.querySelector("#btn-new").addEventListener("click", () => {
 });
 
 document.querySelector("#btn-reset").addEventListener("click", () => {
-  removeGame();
+  removeGameInfo();
+  resultScreen.classList.remove("active");
   sudokuScreen.classList.remove("active");
   startGame.classList.add("active");
 });
@@ -192,6 +183,7 @@ document.querySelector("#btn-delete").addEventListener("click", () => {
 
   let row = Math.floor(selectedCell / GAME_DUMMY_DATA.TABLE_SIZE);
   let col = selectedCell % GAME_DUMMY_DATA.TABLE_SIZE;
+
   sudokuAnswer[row][col] = 0;
 });
 
