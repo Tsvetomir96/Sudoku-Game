@@ -8,7 +8,7 @@ const GAME_DUMMY_DATA = {
   LEVEL_POINTS: [1, 38, 47],
 };
 
-// GAME SCREENS
+// GAME SCREENS & CONTROLLERS
 const startGame = document.querySelector("#start-screen");
 const sudokuScreen = document.querySelector("#sudoku-screen");
 const cells = document.querySelectorAll(".sudoku-screen_cell");
@@ -78,12 +78,12 @@ const clickedCell = (index) => {
   let row = Math.floor(index / GAME_DUMMY_DATA.TABLE_SIZE);
   let col = index % GAME_DUMMY_DATA.TABLE_SIZE;
 
-  let box_start_row = row - (row % 3);
-  let box_start_col = col - (col % 3);
+  let boxStartRow = row - (row % 3);
+  let boxStartCol = col - (col % 3);
 
   for (let i = 0; i < GAME_DUMMY_DATA.TABLE_BOX; i++) {
     for (let j = 0; j < GAME_DUMMY_DATA.TABLE_BOX; j++) {
-      let cell = cells[9 * (box_start_row + i) + (box_start_col + j)];
+      let cell = cells[9 * (boxStartRow + i) + (boxStartCol + j)];
       cell.classList.add("hover");
     }
   }
@@ -114,8 +114,7 @@ const gameWin = () => {
 };
 
 const result = () => {
-  // resultScreen.classList.add("active");
-  alert("ahahhaha");
+  resultScreen.classList.add("active");
 };
 
 const addNumberToBoard = () => {
@@ -176,6 +175,12 @@ document
 document.querySelector("#btn-new").addEventListener("click", () => {
   initSudoku();
   gameStarted();
+});
+
+document.querySelector("#btn-reset").addEventListener("click", () => {
+  removeGame();
+  sudokuScreen.classList.remove("active");
+  startGame.classList.add("active");
 });
 
 document.querySelector("#btn-delete").addEventListener("click", () => {

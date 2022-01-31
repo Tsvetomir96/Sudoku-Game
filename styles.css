@@ -1,3 +1,5 @@
+/* BASE */
+
 * {
   padding: 0;
   margin: 0;
@@ -10,8 +12,6 @@ body {
   background-color: bisque;
 }
 
-/* BASE */
-
 ul {
   list-style: none;
 }
@@ -19,6 +19,10 @@ ul {
 a {
   text-decoration: none;
   color: unset;
+}
+
+button {
+  font-family: "Passion One", cursive;
 }
 
 /* CONTAINERS */
@@ -205,13 +209,11 @@ nav {
     border: none;
     border-radius: 0.4rem;
     height: 1.6rem;
-    font-family: "Passion One", cursive;
     font-size: 1.6rem;
 }
 
 .btn-number {
     height: 1.6rem;
-    font-family: "Passion One", cursive;
     font-size: 1.3rem;
     cursor: pointer;
 }
@@ -227,4 +229,20 @@ nav {
     background-color: rgb(153, 40, 40);
     transition: 0.3s;
     cursor: pointer;
+}
+
+.btn-reset {
+  background-color: rgb(119, 223, 115);
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  height: 1.6rem;
+  font-size: 1.2rem;
+  padding: 0.2rem;
+}
+
+.btn-reset:hover {
+  background-color: rgb(96, 187, 93);
+  transition: 0.3s;
+  cursor: pointer;
 }
