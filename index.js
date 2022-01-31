@@ -79,7 +79,7 @@ const shuffleArray = (arr) => {
   return arr;
 };
 
-// Check for completed sudoku table. 
+// Check for completed sudoku table.
 const sudokuBoardCompleted = (table) => {
   return table.every((row, i) => {
     return row.every((value, j) => {

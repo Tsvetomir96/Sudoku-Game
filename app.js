@@ -5,7 +5,7 @@ const GAME_DUMMY_DATA = {
   TABLE_BOX: 3,
   SUDOKU_NUMBERS: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   LEVELS: ["Easy", "Medium", "Hard"],
-  LEVEL_POINTS: [1, 38, 47],
+  LEVEL_POINTS: [2, 38, 47],
 };
 
 // GAME SCREENS & CONTROLLERS
@@ -17,10 +17,10 @@ const resultScreen = document.querySelector("#result-screen");
 
 // GAME VALUES
 let levelIndex = 0;
-let selectedCell = -1;
 let level = GAME_DUMMY_DATA.LEVEL_POINTS[levelIndex];
 let gameSudoku;
 let sudokuAnswer;
+let selectedCell = -1;
 
 const gameInfo = () => JSON.parse(localStorage.getItem("game"));
 
@@ -44,6 +44,7 @@ const sudokuBoard = () => {
   }
 };
 
+// Clear the sudoku board.
 const sudokuBoardClear = () => {
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     cells[i].innerHTML = "";
@@ -56,11 +57,13 @@ const initSudoku = () => {
   sudokuBoardClear();
   resetCell();
 
+  // Generating the sudoku puzzle.
   gameSudoku = sudokuNumGenerator(level);
   sudokuAnswer = [...gameSudoku.question];
 
   saveGameData();
 
+  // Show the sudoku to the SPAN elements.
   for (let i = 0; i < Math.pow(GAME_DUMMY_DATA.TABLE_SIZE, 2); i++) {
     let row = Math.floor(i / GAME_DUMMY_DATA.TABLE_SIZE);
     let col = i % GAME_DUMMY_DATA.TABLE_SIZE;
@@ -193,11 +196,6 @@ document.querySelector("#btn-delete").addEventListener("click", () => {
 });
 
 const init = () => {
-  const game = gameInfo();
-  // document.querySelector("#btn-continue").style.display = game
-  //   ? "grid"
-  //   : "none";
-
   sudokuBoard();
   cellEvent();
   addNumberToBoard();
